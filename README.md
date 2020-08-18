@@ -34,4 +34,11 @@ This utility exposes your device local tcp port to internet via an intermediate 
 
 ##### Example 2
 
-		
+	$./expose_port.sh <local_port> <username>@<remote_server_ip/dns>
+
+	<local_port> 			: Local port to expose to internet
+	<remote_server_ip/dns>	: Server with public ip address 
+
+	$./expose_port.sh 22 test@domain123.com
+
+	

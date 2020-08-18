@@ -60,6 +60,10 @@ else
 	echo " Remote Host Details 				  : $REMOTE_DETAILS -p $REMOTE_SSH_PORT"
 fi
 
+if [ -z "$REMOTE_SSH_PORT" ]; then
+	REMOTE_SSH_PORT=22
+fi
+
 while [ 1 ]
 do
 	if [[ ! -z $REMOTE_PASS ]]; then
