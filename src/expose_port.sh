@@ -2,44 +2,75 @@ LOCAL_PORT=""
 REMOTE_IP=""
 REMOTE_UNAME=""
 REMOTE_PASS=""
+REMOTE_SSH_PORT=""
+REMOTE_DETAILS=""
+
+#Single Line Usage:
+#./expose_port.sh <local_port_to_expose> <username>@<remote_ip> <remote_ssh_port>
+#./expose_port.sh 22 testuser@2.3.4.5 
+
+if [ $# -lt 2 ]; then 
+	echo
+	echo
+	echo " Press ( ctrl + c ) to exit application "
+	echo
+	echo
+	while [ 1 ]
+	do
+		if [[ ! -z $LOCAL_PORT ]]; then
+	        break
+	    fi
+	    read -p " Enter local port number to expose to the world   : " LOCAL_PORT    </dev/tty
+	done
+
+
+	while [ 1 ]
+	do
+    	if [[ ! -z $REMOTE_IP ]]; then
+        	break
+    	fi
+    	read -p " Enter remote server [ ip address / domain name ] : " REMOTE_IP     </dev/tty
+	done
+
+	while [ 1 ]
+	do
+    	if [[ ! -z $REMOTE_UNAME ]]; then
+        	break
+    	fi
+    	read -p " Enter remote server username                     : " REMOTE_UNAME  </dev/tty
+	done
+
+else
+	
+	if [ ! -z "$1" ]; then
+    	LOCAL_PORT=$1
+	fi
+
+	if [ ! -z "$2" ]; then
+    	REMOTE_DETAILS=$2
+	fi
+	
+	if [ ! -z "$3" ]; then
+    	REMOTE_SSH_PORT=$3
+	else
+		REMOTE_SSH_PORT=22
+	fi
+	echo
+	echo " Local Port 					  : $LOCAL_PORT"
+	echo " Remote Host Details 				  : $REMOTE_DETAILS -p $REMOTE_SSH_PORT"
+fi
 
 while [ 1 ]
 do
-    read -p " Enter local port number to expose to the world   : " LOCAL_PORT    </dev/tty
-    if [[ ! -z $LOCAL_PORT ]]; then
-        break
-    fi
+	if [[ ! -z $REMOTE_PASS ]]; then
+		break
+	fi
+	read -sp " Enter remote server password                     : " REMOTE_PASS
 done
 
-while [ 1 ]
-do
-    read -p " Enter remote server [ ip address / domain name ] : " REMOTE_IP     </dev/tty
-    if [[ ! -z $REMOTE_IP ]]; then
-        break
-    fi
-done
-
-while [ 1 ]
-do
-    read -p " Enter remote server username                     : " REMOTE_UNAME  </dev/tty
-    if [[ ! -z $REMOTE_UNAME ]]; then
-        break
-    fi
-done
-
-while [ 1 ]
-do
-    read -sp " Enter remote server password                     : " REMOTE_PASS
-    if [[ ! -z $REMOTE_PASS ]]; then
-        break
-    fi
-done
-
-
-
-#echo    " Enter remote server password                     : " 
 echo 
 echo 
+
 #Users in the internet can use this port along with $REMOTE_IP to communicate with THIS machine
 INCOMING_PORT=10000
 PORT_CHECK_LIMIT=10006
@@ -49,7 +80,7 @@ ERROR_LOG="/tmp/expose_port_error.log"
 while [ $INCOMING_PORT -lt $PORT_CHECK_LIMIT ]
 do
     #printf "."
-    rm $ERROR_LOG
+    rm $ERROR_LOG 2> /dev/null
     
     if [ -f "$ERROR_LOG" ]; then
         echo
@@ -60,9 +91,13 @@ do
     fi
 
     touch $ERROR_LOG
-    #Change "-p 22" to appropriate ssh port if the remote server isn't configured with default ssh port
-    sshpass -p $REMOTE_PASS  ssh -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p 22 $REMOTE_UNAME@$REMOTE_IP 2> $ERROR_LOG
-    
+   
+	if [[ ! -z $REMOTE_DETAILS ]]; then 
+		sshpass -p $REMOTE_PASS  ssh -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p $REMOTE_SSH_PORT $REMOTE_DETAILS 2> $ERROR_LOG
+	else
+		sshpass -p $REMOTE_PASS  ssh -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p $REMOTE_SSH_PORT $REMOTE_UNAME@$REMOTE_IP 2> $ERROR_LOG
+    fi
+
     #Check Command Exit Status
     if [ $? -ne 0 ]; then
         echo
@@ -72,6 +107,7 @@ do
         printf "\t( execution failure ) ssh -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p 22 $REMOTE_UNAME@$REMOTE_IP 2> $ERROR_LOG"
         echo
         echo
+    	rm $ERROR_LOG 2> /dev/null
         exit 1
     fi  
 
@@ -106,9 +142,11 @@ echo ""
 echo " Local Port ( $LOCAL_PORT ) successfully exposed to the world!!"
 echo ""
 echo ""
-echo " You can access tcp port ( $LOCAL_PORT ) on this device using [ IP :$REMOTE_IP ] [ PORT : $INCOMING_PORT ]"
+echo " You can access tcp port ( $LOCAL_PORT ) on this device using [ IP/DNS : $REMOTE_IP ] [ PORT : $INCOMING_PORT ]"
 echo ""
 echo ""
 echo "#########################################################################################"
 echo ""
 echo ""
+
+rm $ERROR_LOG 2> /dev/null
