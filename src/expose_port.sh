@@ -16,6 +16,20 @@ REMOTE_DETAILS=""
 #./expose_port.sh <local_port_to_expose> <username>@<remote_ip> <remote_ssh_port>
 #./expose_port.sh 22 testuser@2.3.4.5 
 
+# Prerequisite check
+
+which sshpass > /dev/null 
+if [ $? -ne 0 ]; then
+	echo " [ error ] ( sshpass ) is not installed in this system, Install and try again"
+fi
+
+which ssh > /dev/null 
+if [ $? -ne 0 ]; then
+	echo " [ error ] ( ssh ) is not installed in this system, Install and try again"
+fi
+
+
+
 if [ $# -lt 2 ]; then 
 	echo
 	echo
