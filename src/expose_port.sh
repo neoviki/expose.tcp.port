@@ -1,3 +1,10 @@
+: '
+	Utility to Expose Local Device Port to Internet
+	
+	Author	: 	Viki ( a ) Vignesh Natarajan
+			:	vikiworks.io
+'
+
 LOCAL_PORT=""
 REMOTE_IP=""
 REMOTE_UNAME=""
