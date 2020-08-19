@@ -118,9 +118,9 @@ do
     touch $ERROR_LOG
    
 	if [[ ! -z $REMOTE_DETAILS ]]; then 
-		sshpass -p $REMOTE_PASS  ssh -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p $REMOTE_SSH_PORT $REMOTE_DETAILS 2> $ERROR_LOG
+		sshpass -p $REMOTE_PASS  ssh -o StrictHostKeyChecking=no -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p $REMOTE_SSH_PORT $REMOTE_DETAILS 2> $ERROR_LOG
 	else
-		sshpass -p $REMOTE_PASS  ssh -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p $REMOTE_SSH_PORT $REMOTE_UNAME@$REMOTE_IP 2> $ERROR_LOG
+		sshpass -p $REMOTE_PASS  ssh -o StrictHostKeyChecking=no -f -N  -R $INCOMING_PORT:localhost:$LOCAL_PORT -p $REMOTE_SSH_PORT $REMOTE_UNAME@$REMOTE_IP 2> $ERROR_LOG
     fi
 
     #Check Command Exit Status
