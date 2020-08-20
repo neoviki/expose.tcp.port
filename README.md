@@ -58,6 +58,26 @@ The utility uses ssh port forwarding under the hood.
 
     ####################################################################
 
+##### Example 3 -> Run utility in background ( -bg )
+	
+	$./expose_port 80 remote_user@test.domain.com -bg
+
+    ####################################################################
+
+    You can access port ( 22 ) of this device using the following details, 
+
+    USER NAME ( optional )     :  local_user
+    DOMAIN NAME                :  test.domain.com
+    PORT                       :  10001 
+
+    ####################################################################
+
+
+    -bg: This option is used to run the utility in background 
+
+##### Caution!!:
+   
+    Remember to disble the exposed port after completing your work using "unexpose_port" utility.
 
 #### Terminate Debugger
 

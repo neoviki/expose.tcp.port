@@ -17,7 +17,26 @@ THIS_USER=$USER
 
 LOCAL_PORT=""
 
-#RUN_BACKGROUND="true"
+if [ "$1" = "-bg" ]; then
+    RUN_BACKGROUND="true"
+fi
+
+if [ "$2" = "-bg" ]; then
+    RUN_BACKGROUND="true"
+fi
+
+if [ "$3" = "-bg" ]; then
+    RUN_BACKGROUND="true"
+fi
+
+if [ "$4" = "-bg" ]; then
+    RUN_BACKGROUND="true"
+fi
+
+if [ "$5" = "-bg" ]; then
+    RUN_BACKGROUND="true"
+fi
+
 
 #Single Line Usage:
 #./expose_port <local_port_to_expose> <username>@<remote_ip> <remote_ssh_port>
