@@ -17,6 +17,17 @@ THIS_USER=$USER
 
 LOCAL_PORT=""
 
+
+
+echo
+echo "  QUICK_USAGE	 :  ./expose_port <local_port to expose> root@<public_server>:<remote_ssh_port> "
+echo
+echo "  EXAMPLE        :  ./expose_port 80 root@example.com:22"
+echo
+
+
+
+
 if [ "$1" = "-bg" ]; then
     RUN_BACKGROUND="true"
 fi
